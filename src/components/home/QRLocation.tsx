@@ -1,11 +1,8 @@
 import { MapPin, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
 export function QRLocation() {
   const googleMapsLink = 'https://maps.app.goo.gl/xpK7eQM61PjZFihTA';
-
-  return (
-    <section id="location" className="section-padding bg-gradient-to-br from-primary/5 via-background to-accent/5">
+  return <section id="location" className="section-padding bg-gradient-to-br from-primary/5 via-background to-accent/5">
       <div className="container-narrow">
         <div className="bg-card rounded-3xl shadow-warm-lg border border-border overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
@@ -25,15 +22,9 @@ export function QRLocation() {
 
               {/* QR Code */}
               <div className="bg-white p-4 rounded-2xl shadow-sm mb-6">
-                <img
-                  src="/qr-location.png"
-                  alt="Scan to open restaurant location in Google Maps"
-                  className="w-48 h-48 object-contain"
-                  loading="lazy"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/placeholder.svg';
-                  }}
-                />
+                <img alt="Scan to open restaurant location in Google Maps" className="w-48 h-48 object-contain" loading="lazy" onError={e => {
+                (e.target as HTMLImageElement).src = '/placeholder.svg';
+              }} src="/lovable-uploads/e7a6c15e-6399-4e74-9426-bb16b58020ab.png" />
               </div>
 
               <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
@@ -53,8 +44,8 @@ export function QRLocation() {
               <div className="space-y-6">
                 <div>
                   <h5 className="font-medium text-accent mb-2">Address</h5>
-                  <p className="text-background/80 leading-relaxed">
-                    123 Food Street, Flavor Town<br />
+                  <p className="text-background/80 leading-relaxed">Shop No. 10 & 11, First Floor, SMS Building, 84/1, Opposite Sobha Mayflower, Green Glen Layout, Bengaluru, Karnataka 560103
+City, State 123456<br />
                     Near City Center Mall<br />
                     City, State 123456
                   </p>
@@ -63,17 +54,17 @@ export function QRLocation() {
                 <div>
                   <h5 className="font-medium text-accent mb-2">Opening Hours</h5>
                   <div className="text-background/80 space-y-1">
-                    <p>Monday - Friday: 11 AM - 10 PM</p>
-                    <p>Saturday - Sunday: 9 AM - 11 PM</p>
-                    <p className="text-accent font-medium">Weekend Brunch: 9 AM - 12 PM</p>
+                    <p>Monday - Thursday: 12 PM - 11 PM</p>
+                    <p>Friday - Sunday: 12 PM - 11:30 PM</p>
+                    <p className="text-accent font-medium">Closed on Every First Monday of the Month</p>
                   </div>
                 </div>
 
                 <div>
                   <h5 className="font-medium text-accent mb-2">Contact</h5>
                   <p className="text-background/80">
-                    Phone: <a href="tel:+919999999999" className="hover:text-accent transition-colors">+91 99999 99999</a><br />
-                    Email: <a href="mailto:hello@dlitticious.com" className="hover:text-accent transition-colors">hello@dlitticious.com</a>
+                    Phone: <a href="tel:+919999999999" className="hover:text-accent transition-colors">+91 74114 31903</a><br />
+                    Email: <a href="mailto:hello@dlitticious.com" className="hover:text-accent transition-colors">contact@dlitticious.com</a>
                   </p>
                 </div>
               </div>
@@ -81,6 +72,5 @@ export function QRLocation() {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }
