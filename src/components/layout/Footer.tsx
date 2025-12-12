@@ -1,23 +1,29 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Phone, Mail, MapPin } from 'lucide-react';
-
-const socialLinks = [
-  { icon: Instagram, href: 'https://instagram.com/dlitticious', label: 'Instagram' },
-];
-
-const quickLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About Us' },
-  { href: '/#menu', label: 'Menu' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/contact', label: 'Contact' },
-];
-
+const socialLinks = [{
+  icon: Instagram,
+  href: 'https://instagram.com/dlitticious',
+  label: 'Instagram'
+}];
+const quickLinks = [{
+  href: '/',
+  label: 'Home'
+}, {
+  href: '/about',
+  label: 'About Us'
+}, {
+  href: '/#menu',
+  label: 'Menu'
+}, {
+  href: '/blog',
+  label: 'Blog'
+}, {
+  href: '/contact',
+  label: 'Contact'
+}];
 export function Footer() {
   const currentYear = new Date().getFullYear();
-
-  return (
-    <footer className="bg-foreground text-background">
+  return <footer className="bg-foreground text-background">
       <div className="container-wide section-padding">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
@@ -30,18 +36,9 @@ export function Footer() {
               passion, and the rich culinary heritage of our land.
             </p>
             <div className="flex space-x-4">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
-                  aria-label={social.label}
-                >
+              {socialLinks.map(social => <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-background/10 flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors" aria-label={social.label}>
                   <social.icon className="w-5 h-5" />
-                </a>
-              ))}
+                </a>)}
             </div>
           </div>
 
@@ -49,16 +46,11 @@ export function Footer() {
           <div>
             <h4 className="font-display text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-background/70 hover:text-accent transition-colors"
-                  >
+              {quickLinks.map(link => <li key={link.href}>
+                  <Link to={link.href} className="text-background/70 hover:text-accent transition-colors">
                     {link.label}
                   </Link>
-                </li>
-              ))}
+                </li>)}
             </ul>
           </div>
 
@@ -68,22 +60,17 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                <span className="text-background/70">
-                  123 Food Street, Flavor Town<br />
+                <span className="text-background/70">Shop No. 10 & 11, First Floor, SMS Building, 84/1, Opposite Sobha Mayflower, Green Glen Layout, Bengaluru, Karnataka 560103<br />
                   City, State 123456
                 </span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-accent flex-shrink-0" />
-                <a href="tel:+919999999999" className="text-background/70 hover:text-accent transition-colors">
-                  +91 99999 99999
-                </a>
+                <a href="tel:+919999999999" className="text-background/70 hover:text-accent transition-colors">+91 74114-31903</a>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-accent flex-shrink-0" />
-                <a href="mailto:hello@dlitticious.com" className="text-background/70 hover:text-accent transition-colors">
-                  hello@dlitticious.com
-                </a>
+                <a href="mailto:hello@dlitticious.com" className="text-background/70 hover:text-accent transition-colors">contact@dlitticious.com</a>
               </li>
             </ul>
           </div>
@@ -93,16 +80,14 @@ export function Footer() {
             <h4 className="font-display text-lg font-semibold mb-4">Opening Hours</h4>
             <ul className="space-y-2 text-background/70">
               <li className="flex justify-between">
-                <span>Monday - Friday</span>
-                <span>11 AM - 10 PM</span>
+                <span>Monday - Thursday</span>
+                <span>12 PM - 11 PM</span>
               </li>
               <li className="flex justify-between">
-                <span>Saturday - Sunday</span>
-                <span>9 AM - 11 PM</span>
+                <span>Friday - Sunday</span>
+                <span>12 PM - 11:30 PM</span>
               </li>
-              <li className="pt-2 text-accent font-medium">
-                Weekend Brunch: 9 AM - 12 PM
-              </li>
+              <li className="pt-2 text-accent font-medium">Closed on Every First Monday of the Month</li>
             </ul>
           </div>
         </div>
@@ -119,6 +104,5 @@ export function Footer() {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 }
