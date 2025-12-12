@@ -2,7 +2,7 @@ import { MapPin, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function QRLocation() {
-  const googleMapsLink = 'https://maps.google.com/?q=d%27LITTIcious+Restaurant';
+  const googleMapsLink = 'https://maps.app.goo.gl/xpK7eQM61PjZFihTA';
 
   return (
     <section id="location" className="section-padding bg-gradient-to-br from-primary/5 via-background to-accent/5">
