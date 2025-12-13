@@ -65,6 +65,21 @@ export default {
         },
         cream: "hsl(var(--cream))",
         espresso: "hsl(var(--espresso))",
+        tile: {
+          DEFAULT: "hsl(var(--tile))",
+          hover: "hsl(var(--tile-hover))",
+          border: "hsl(var(--tile-border))",
+          title: "hsl(var(--tile-title))",
+          desc: "hsl(var(--tile-desc))",
+          price: "hsl(var(--tile-price))",
+        },
+        tag: {
+          veg: "hsl(var(--tag-veg))",
+          nonveg: "hsl(var(--tag-nonveg))",
+          spicy: "hsl(var(--tag-spicy))",
+          bestseller: "hsl(var(--tag-bestseller))",
+          egg: "hsl(var(--tag-egg))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
