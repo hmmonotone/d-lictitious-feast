@@ -27,9 +27,9 @@
     --muted: 30 15% 94%;
     --muted-foreground: 20 10% 45%;
 
-    /* Gold accent */
-    --accent: 40 80% 50%;
-    --accent-foreground: 20 20% 15%;
+    /* Gold accent - Mustard Gold #E3A23B */
+    --accent: 40 76% 56%;
+    --accent-foreground: 20 40% 13%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 30 25% 98%;
@@ -43,12 +43,27 @@
     /* Custom restaurant tokens */
     --warm: 30 40% 96%;
     --warm-foreground: 20 25% 25%;
-    --gold: 40 80% 50%;
+    --gold: 40 76% 56%;
     --gold-muted: 40 40% 75%;
     --terracotta: 15 70% 45%;
     --terracotta-light: 15 60% 60%;
     --cream: 40 30% 95%;
     --espresso: 20 30% 20%;
+
+    /* Tile/Card color theme */
+    --tile: 35 43% 96%;
+    --tile-hover: 40 60% 92%;
+    --tile-border: 40 76% 56%;
+    --tile-title: 15 35% 13%;
+    --tile-desc: 15 20% 31%;
+    --tile-price: 40 76% 56%;
+
+    /* Tag colors */
+    --tag-veg: 122 39% 34%;
+    --tag-nonveg: 0 100% 27%;
+    --tag-spicy: 4 63% 47%;
+    --tag-bestseller: 40 76% 56%;
+    --tag-egg: 30 60% 45%;
   }
 
   .dark {
@@ -88,6 +103,21 @@
     --terracotta-light: 15 55% 65%;
     --cream: 30 15% 18%;
     --espresso: 30 20% 90%;
+
+    /* Dark mode tile colors */
+    --tile: 20 20% 12%;
+    --tile-hover: 20 25% 16%;
+    --tile-border: 40 70% 55%;
+    --tile-title: 30 20% 95%;
+    --tile-desc: 30 15% 70%;
+    --tile-price: 40 70% 55%;
+
+    /* Tag colors (same in dark) */
+    --tag-veg: 122 39% 40%;
+    --tag-nonveg: 0 70% 40%;
+    --tag-spicy: 4 63% 50%;
+    --tag-bestseller: 40 70% 55%;
+    --tag-egg: 30 60% 50%;
   }
 }
 

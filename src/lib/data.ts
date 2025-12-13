@@ -1,9 +1,13 @@
-import { MenuItem, BlogPost } from '@/types';
-import menuData from '@/data/menu.json';
+import { MenuItem, BlogPost, MenuCategory } from '@/types';
+import { menuItems, categories } from '@/data/menu';
 import blogPostsData from '@/data/blog/posts.json';
 
 export function getMenuItems(): MenuItem[] {
-  return menuData as MenuItem[];
+  return menuItems;
+}
+
+export function getCategories(): MenuCategory[] {
+  return categories;
 }
 
 export function getFeaturedItems(): MenuItem[] {
@@ -15,8 +19,12 @@ export function getMenuItemById(id: string): MenuItem | undefined {
   return getMenuItems().find(item => item.id === id);
 }
 
+export function getMenuItemsByCategory(categoryHandle: string): MenuItem[] {
+  return getMenuItems().filter(item => item.category === categoryHandle);
+}
+
 export function getBlogPosts(): BlogPost[] {
-  return (blogPostsData as BlogPost[]).sort(
+  return (blogPostsData as unknown as BlogPost[]).sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 }
