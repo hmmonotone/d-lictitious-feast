@@ -44,10 +44,8 @@ export function QRLocation() {
               <div className="space-y-6">
                 <div>
                   <h5 className="font-medium text-accent mb-2">Address</h5>
-                  <p className="text-background/80 leading-relaxed">Shop No. 10 & 11, First Floor, SMS Building, 84/1, Opposite Sobha Mayflower, Green Glen Layout, Bengaluru, Karnataka 560103
-City, State 123456<br />
-                    Near City Center Mall<br />
-                    City, State 123456
+                  <p className="text-background/80 leading-relaxed">
+                    Shop No. 10 & 11, First Floor, SMS Building, 84/1, Opposite Sobha Mayflower, Green Glen Layout, Bengaluru, Karnataka 560103
                   </p>
                 </div>
 
@@ -63,7 +61,7 @@ City, State 123456<br />
                 <div>
                   <h5 className="font-medium text-accent mb-2">Contact</h5>
                   <p className="text-background/80">
-                    Phone: <a href="tel:+919999999999" className="hover:text-accent transition-colors">+91 74114 31903</a><br />
+                    Phone: <a href="tel:+917411431903" className="hover:text-accent transition-colors">+91 74114 31903</a><br />
                     Email: <a href="mailto:hello@dlitticious.com" className="hover:text-accent transition-colors">contact@dlitticious.com</a>
                   </p>
                 </div>

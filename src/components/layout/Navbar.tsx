@@ -17,7 +17,7 @@ export function Navbar() {
   const { isScrolled } = useScrollPosition();
   const location = useLocation();
 
-  const whatsappLink = 'https://wa.me/919999999999?text=Hi!%20I%20would%20like%20to%20place%20an%20order';
+  const whatsappLink = 'https://wa.me/917411431903?text=Hi!%20I%20would%20like%20to%20place%20an%20order';
 
   return (
     <header

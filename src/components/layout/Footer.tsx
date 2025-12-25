@@ -60,14 +60,13 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                <span className="text-background/70">Shop No. 10 & 11, First Floor, SMS Building, 84/1, Opposite Sobha Mayflower, Green Glen Layout, Bengaluru, Karnataka 560103
-                <br />
-                  City, State 123456
+                <span className="text-background/70">
+                  Shop No. 10 & 11, First Floor, SMS Building, 84/1, Opposite Sobha Mayflower, Green Glen Layout, Bengaluru, Karnataka 560103
                 </span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-accent flex-shrink-0" />
-                <a href="tel:+919999999999" className="text-background/70 hover:text-accent transition-colors">+91 74114-31903</a>
+                <a href="tel:+917411431903" className="text-background/70 hover:text-accent transition-colors">+91 74114 31903</a>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-accent flex-shrink-0" />

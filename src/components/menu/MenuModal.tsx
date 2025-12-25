@@ -27,7 +27,7 @@ export function MenuModal({ item, isOpen, onClose }: MenuModalProps) {
 
   if (!item) return null;
 
-  const whatsappLink = `https://wa.me/919999999999?text=Hi!%20I%20would%20like%20to%20order%20${encodeURIComponent(item.name)}`;
+  const whatsappLink = `https://wa.me/917411431903?text=Hi!%20I%20would%20like%20to%20order%20${encodeURIComponent(item.name)}`;
   const isVeg = item.foodType === 'veg';
   const isEgg = item.foodType === 'egg';
   const isNonVeg = item.foodType === 'non-veg';
@@ -96,7 +96,7 @@ export function MenuModal({ item, isOpen, onClose }: MenuModalProps) {
               </a>
             </Button>
             <Button asChild variant="outline" className="flex-1 border-tile-border text-tile-title hover:bg-tile-hover">
-              <a href="tel:+919999999999">
+              <a href="tel:+917411431903">
                 <Phone className="w-4 h-4 mr-2" />
                 Call to Order
               </a>

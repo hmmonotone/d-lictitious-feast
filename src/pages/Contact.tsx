@@ -58,7 +58,9 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">Address</h3>
-                  <p className="text-muted-foreground">123 Food Street, Flavor Town, City 123456</p>
+                  <p className="text-muted-foreground">
+                    Shop No. 10 & 11, First Floor, SMS Building, 84/1, Opposite Sobha Mayflower, Green Glen Layout, Bengaluru, Karnataka 560103
+                  </p>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -67,12 +69,18 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">Hours</h3>
-                  <p className="text-muted-foreground">Mon-Fri: 11AM-10PM | Sat-Sun: 9AM-11PM</p>
+                  <p className="text-muted-foreground">
+                    Monday - Thursday: 12 PM - 11 PM
+                    <br />
+                    Friday - Sunday: 12 PM - 11:30 PM
+                    <br />
+                    Closed on Every First Monday of the Month
+                  </p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <Button asChild className="bg-green-600 hover:bg-green-700">
-                  <a href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer">
+                  <a href="https://wa.me/917411431903" target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp
                   </a>
                 </Button>
