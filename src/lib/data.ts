@@ -1,6 +1,5 @@
-import { MenuItem, BlogPost, MenuCategory } from '@/types';
+import { MenuItem, MenuCategory } from '@/types';
 import { menuItems, categories } from '@/data/menu';
-import blogPostsData from '@/data/blog/posts.json';
 
 export function getMenuItems(): MenuItem[] {
   return menuItems;
@@ -21,24 +20,4 @@ export function getMenuItemById(id: string): MenuItem | undefined {
 
 export function getMenuItemsByCategory(categoryHandle: string): MenuItem[] {
   return getMenuItems().filter(item => item.category === categoryHandle);
-}
-
-export function getBlogPosts(): BlogPost[] {
-  return (blogPostsData as unknown as BlogPost[]).sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
-}
-
-export function getBlogPostBySlug(slug: string): BlogPost | undefined {
-  return getBlogPosts().find(post => post.slug === slug);
-}
-
-export async function getBlogContent(slug: string): Promise<string> {
-  try {
-    const content = await import(`@/data/blog/${slug}.md?raw`);
-    return content.default;
-  } catch (error) {
-    console.error('Error loading blog post:', error);
-    return '';
-  }
 }

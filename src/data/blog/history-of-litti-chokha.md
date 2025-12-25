@@ -34,7 +34,7 @@ In recent years, Litti Chokha has transcended its humble origins to become a cel
 
 Every Litti at d'LITTIcious is:
 - Made fresh to order
-- Roasted over authentic coal fire
+- Roasted over authentic open flame
 - Served with house-made chokha
 - Drizzled with pure desi ghee
 

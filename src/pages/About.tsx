@@ -30,7 +30,7 @@ const About = () => {
             <p className="text-xl leading-relaxed mb-8">
               d'LITTIcious was born from a simple dream: to share the incredible culinary 
               heritage of Bihar with the world. Growing up in Bihar, every meal was a 
-              celebration—the smoky aroma of litti roasting over coal, the tangy punch 
+              celebration—the smoky aroma of litti roasting over open flame, the tangy punch 
               of chokha, the comforting warmth of sattu paratha on cold mornings.
             </p>
             <p className="leading-relaxed mb-8">

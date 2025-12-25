@@ -14,7 +14,7 @@ const loginSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-const EditorLogin = () => {
+const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +23,7 @@ const EditorLogin = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const validation = loginSchema.safeParse({ email, password });
     if (!validation.success) {
       toast.error(validation.error.issues[0].message);
@@ -38,7 +38,7 @@ const EditorLogin = () => {
       toast.error(error.message || 'Invalid credentials');
     } else {
       toast.success('Logged in successfully');
-      navigate('/blog/editor/dashboard');
+      navigate('/admin');
     }
   };
 
@@ -48,10 +48,10 @@ const EditorLogin = () => {
         <div className="container-narrow max-w-md">
           <div className="bg-card rounded-2xl p-8 border border-border shadow-warm">
             <h1 className="font-display text-3xl font-bold text-foreground mb-2 text-center">
-              Editor Login
+              Admin Login
             </h1>
             <p className="text-muted-foreground text-center mb-8">
-              Sign in to manage blog posts
+              Sign in to manage intern access
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -60,7 +60,7 @@ const EditorLogin = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="editor@dlitticious.com"
+                  placeholder="admin@dlitticious.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -81,8 +81,8 @@ const EditorLogin = () => {
                 />
               </div>
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
                 disabled={isLoading}
               >
@@ -103,4 +103,4 @@ const EditorLogin = () => {
   );
 };
 
-export default EditorLogin;
+export default AdminLogin;

@@ -21,7 +21,7 @@ While our recipes are traditional, our presentation is contemporary. We believe 
 
 ## Our Menu Highlights
 
-- **Classic Litti Chokha** - Our signature, prepared over coal fire
+- **Classic Litti Chokha** - Our signature, prepared over open flame
 - **Bihari Mutton Curry** - Slow-cooked for hours
 - **Sattu Paratha** - A protein-packed breakfast favorite
 - **Thekua & Makhana Kheer** - For the sweet ending

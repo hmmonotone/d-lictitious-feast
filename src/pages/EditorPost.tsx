@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '@/components/layout';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
+import { apiFetch } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -41,7 +41,7 @@ const EditorPost = () => {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/editor/login');
+      navigate('/blog/editor');
     } else if (!authLoading && user && !isEditor) {
       toast.error('You do not have editor permissions');
       navigate('/');
@@ -56,25 +56,21 @@ const EditorPost = () => {
 
   async function fetchPost() {
     setIsLoading(true);
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('slug', editSlug)
-      .maybeSingle();
-
-    if (error || !data) {
-      toast.error('Post not found');
-      navigate('/editor');
-    } else {
+    try {
+      const data = await apiFetch(`/posts/${editSlug}`);
+      const post = data.post as typeof formData;
       setFormData({
-        title: data.title,
-        slug: data.slug,
-        excerpt: data.excerpt,
-        content: data.content,
-        author: data.author,
-        read_time: data.read_time,
-        published: data.published,
+        title: post.title,
+        slug: post.slug,
+        excerpt: post.excerpt,
+        content: post.content,
+        author: post.author,
+        read_time: post.read_time,
+        published: post.published,
       });
+    } catch (error) {
+      toast.error((error as Error).message || 'Post not found');
+      navigate('/blog/editor/dashboard');
     }
     setIsLoading(false);
   }
@@ -108,31 +104,26 @@ const EditorPost = () => {
     setIsSaving(true);
 
     if (isEditing) {
-      const { error } = await supabase
-        .from('blog_posts')
-        .update(formData)
-        .eq('slug', editSlug);
-
-      if (error) {
-        toast.error('Failed to update post: ' + error.message);
-      } else {
+      try {
+        await apiFetch(`/posts/${editSlug}`, {
+          method: 'PUT',
+          body: JSON.stringify(formData)
+        });
         toast.success('Post updated successfully');
-        navigate('/editor');
+      navigate('/blog/editor/dashboard');
+      } catch (error) {
+        toast.error('Failed to update post: ' + (error as Error).message);
       }
     } else {
-      const { error } = await supabase
-        .from('blog_posts')
-        .insert([formData]);
-
-      if (error) {
-        if (error.code === '23505') {
-          toast.error('A post with this slug already exists');
-        } else {
-          toast.error('Failed to create post: ' + error.message);
-        }
-      } else {
+      try {
+        await apiFetch('/posts', {
+          method: 'POST',
+          body: JSON.stringify(formData)
+        });
         toast.success('Post created successfully');
-        navigate('/editor');
+        navigate('/blog/editor/dashboard');
+      } catch (error) {
+        toast.error('Failed to create post: ' + (error as Error).message);
       }
     }
 
@@ -155,7 +146,7 @@ const EditorPost = () => {
         <div className="container-narrow">
           <Button
             variant="ghost"
-            onClick={() => navigate('/editor')}
+            onClick={() => navigate('/blog/editor/dashboard')}
             className="mb-6"
           >
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Dashboard

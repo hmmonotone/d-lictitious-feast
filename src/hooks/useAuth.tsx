@@ -1,90 +1,78 @@
 import React, { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import { apiFetch, clearAuthToken, getAuthToken, setAuthToken } from '@/lib/api';
+
+type AuthUser = {
+  id: string;
+  email: string;
+  role: 'admin' | 'editor';
+};
 
 interface AuthContextType {
-  user: User | null;
-  session: Session | null;
+  user: AuthUser | null;
   isEditor: boolean;
+  isAdmin: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isEditor, setIsEditor] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        // Defer role check with setTimeout to avoid deadlock
-        if (session?.user) {
-          setTimeout(() => {
-            checkUserRole(session.user.id);
-          }, 0);
-        } else {
-          setIsEditor(false);
-        }
-      }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        checkUserRole(session.user.id);
-      }
+    const token = getAuthToken();
+    if (!token) {
       setIsLoading(false);
-    });
+      return;
+    }
 
-    return () => subscription.unsubscribe();
+    apiFetch('/me')
+      .then((data) => {
+        const authUser = data.user as AuthUser;
+        setUser(authUser);
+        setIsAdmin(authUser.role === 'admin');
+        setIsEditor(authUser.role === 'admin' || authUser.role === 'editor');
+      })
+      .catch(() => {
+        clearAuthToken();
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
-  async function checkUserRole(userId: string) {
-    const { data } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', userId)
-      .maybeSingle();
-    
-    setIsEditor(data?.role === 'editor' || data?.role === 'admin');
-  }
-
   async function signIn(email: string, password: string) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error as Error | null };
-  }
+    try {
+      const data = await apiFetch('/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
 
-  async function signUp(email: string, password: string) {
-    const redirectUrl = `${window.location.origin}/`;
-    const { error } = await supabase.auth.signUp({ 
-      email, 
-      password,
-      options: { emailRedirectTo: redirectUrl }
-    });
-    return { error: error as Error | null };
+      setAuthToken(data.token as string);
+      const authUser = data.user as AuthUser;
+      setUser(authUser);
+      setIsAdmin(authUser.role === 'admin');
+      setIsEditor(authUser.role === 'admin' || authUser.role === 'editor');
+      return { error: null };
+    } catch (error) {
+      return { error: error as Error };
+    }
   }
 
   async function signOut() {
-    await supabase.auth.signOut();
+    clearAuthToken();
     setUser(null);
-    setSession(null);
     setIsEditor(false);
+    setIsAdmin(false);
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, isEditor, isLoading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, isEditor, isAdmin, isLoading, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

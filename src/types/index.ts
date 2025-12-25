@@ -25,11 +25,10 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   content?: string;
-  date: string;
-  readTime: string;
+  created_at: string;
+  read_time: string;
   author: string;
   published?: boolean;
-  created_at?: string;
   updated_at?: string;
 }
 

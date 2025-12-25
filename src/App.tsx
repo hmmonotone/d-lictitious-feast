@@ -12,6 +12,8 @@ import BlogPost from "./pages/BlogPost";
 import EditorLogin from "./pages/EditorLogin";
 import EditorDashboard from "./pages/EditorDashboard";
 import EditorPost from "./pages/EditorPost";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,10 +31,12 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/editor/login" element={<EditorLogin />} />
-            <Route path="/editor" element={<EditorDashboard />} />
-            <Route path="/editor/new" element={<EditorPost />} />
-            <Route path="/editor/edit/:slug" element={<EditorPost />} />
+            <Route path="/blog/editor" element={<EditorLogin />} />
+            <Route path="/blog/editor/dashboard" element={<EditorDashboard />} />
+            <Route path="/blog/editor/new" element={<EditorPost />} />
+            <Route path="/blog/editor/edit/:slug" element={<EditorPost />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

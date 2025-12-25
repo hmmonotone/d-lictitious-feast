@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Layout } from '@/components/layout';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
+import { apiFetch } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Loader2 } from 'lucide-react';
@@ -16,7 +16,7 @@ const EditorDashboard = () => {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/editor/login');
+      navigate('/blog/editor');
     } else if (!authLoading && user && !isEditor) {
       toast.error('You do not have editor permissions');
       navigate('/');
@@ -31,50 +31,37 @@ const EditorDashboard = () => {
 
   async function fetchPosts() {
     setIsLoading(true);
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      toast.error('Failed to load posts');
-    } else {
-      setPosts(data.map(post => ({
-        ...post,
-        date: post.created_at,
-        readTime: post.read_time
-      })));
+    try {
+      const data = await apiFetch('/posts');
+      setPosts(data.posts as BlogPost[]);
+    } catch (error) {
+      toast.error((error as Error).message || 'Failed to load posts');
     }
     setIsLoading(false);
   }
 
   async function togglePublish(post: BlogPost) {
-    const { error } = await supabase
-      .from('blog_posts')
-      .update({ published: !post.published })
-      .eq('id', post.id);
-
-    if (error) {
-      toast.error('Failed to update post');
-    } else {
+    try {
+      await apiFetch(`/posts/${post.slug}`, {
+        method: 'PUT',
+        body: JSON.stringify({ published: !post.published })
+      });
       toast.success(post.published ? 'Post unpublished' : 'Post published');
       fetchPosts();
+    } catch (error) {
+      toast.error((error as Error).message || 'Failed to update post');
     }
   }
 
-  async function deletePost(id: string) {
+  async function deletePost(slug: string) {
     if (!confirm('Are you sure you want to delete this post?')) return;
 
-    const { error } = await supabase
-      .from('blog_posts')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      toast.error('Failed to delete post');
-    } else {
+    try {
+      await apiFetch(`/posts/${slug}`, { method: 'DELETE' });
       toast.success('Post deleted');
       fetchPosts();
+    } catch (error) {
+      toast.error((error as Error).message || 'Failed to delete post');
     }
   }
 
@@ -105,7 +92,7 @@ const EditorDashboard = () => {
               <p className="text-muted-foreground">Manage your blog posts</p>
             </div>
             <div className="flex gap-3">
-              <Link to="/editor/new">
+              <Link to="/blog/editor/new">
                 <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
                   <Plus className="w-4 h-4 mr-2" /> New Post
                 </Button>
@@ -123,7 +110,7 @@ const EditorDashboard = () => {
           ) : posts.length === 0 ? (
             <div className="bg-card rounded-2xl p-12 border border-border text-center">
               <p className="text-muted-foreground mb-4">No blog posts yet</p>
-              <Link to="/editor/new">
+              <Link to="/blog/editor/new">
                 <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
                   Create your first post
                 </Button>
@@ -167,7 +154,7 @@ const EditorDashboard = () => {
                           >
                             {post.published ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </Button>
-                          <Link to={`/editor/edit/${post.slug}`}>
+                          <Link to={`/blog/editor/edit/${post.slug}`}>
                             <Button variant="ghost" size="sm" title="Edit">
                               <Edit className="w-4 h-4" />
                             </Button>
@@ -175,7 +162,7 @@ const EditorDashboard = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => deletePost(post.id!)}
+                            onClick={() => deletePost(post.slug)}
                             className="text-destructive hover:text-destructive"
                             title="Delete"
                           >
