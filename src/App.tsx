@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -32,11 +33,25 @@ const App = () => (
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/blog/editor" element={<EditorLogin />} />
-            <Route path="/blog/editor/dashboard" element={<EditorDashboard />} />
+            <Route
+              path="/blog/editor/dashboard"
+              element={
+                <ProtectedRoute redirectTo="/blog/editor" requiredRole="editor">
+                  <EditorDashboard />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/blog/editor/new" element={<EditorPost />} />
             <Route path="/blog/editor/edit/:slug" element={<EditorPost />} />
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute redirectTo="/admin/login" requiredRole="admin">
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

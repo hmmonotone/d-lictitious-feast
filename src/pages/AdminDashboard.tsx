@@ -22,7 +22,7 @@ const internSchema = z.object({
 });
 
 const AdminDashboard = () => {
-  const { user, isAdmin, isLoading: authLoading, signOut } = useAuth();
+  const { loading, logout } = useAuth();
   const [interns, setInterns] = useState<Intern[]>([]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,19 +37,10 @@ const AdminDashboard = () => {
   );
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/admin/login');
-    } else if (!authLoading && user && !isAdmin) {
-      toast.error('You do not have admin permissions');
-      navigate('/');
-    }
-  }, [user, isAdmin, authLoading, navigate]);
-
-  useEffect(() => {
-    if (user && isAdmin) {
+    if (!loading) {
       fetchInterns();
     }
-  }, [user, isAdmin]);
+  }, [loading]);
 
   async function fetchInterns() {
     setIsLoading(true);
@@ -105,11 +96,11 @@ const AdminDashboard = () => {
   }
 
   async function handleSignOut() {
-    await signOut();
+    await logout();
     navigate('/');
   }
 
-  if (authLoading || !isAdmin) {
+  if (loading) {
     return (
       <Layout>
         <div className="pt-32 pb-16 flex justify-center">
@@ -208,7 +199,7 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {sortedInterns.map((intern) => (
-                    <tr key={intern.user_id} className="border-b border-border last:border-0">
+                    <tr key={intern.id} className="border-b border-border last:border-0">
                       <td className="p-4 text-tile-desc">{intern.email}</td>
                       <td className="p-4 text-right">
                         <Button
@@ -216,9 +207,9 @@ const AdminDashboard = () => {
                           size="sm"
                           onClick={() => handleRemoveIntern(intern)}
                           className="text-destructive hover:text-destructive"
-                          disabled={removingUserId === intern.user_id}
+                          disabled={removingUserId === intern.id}
                         >
-                          {removingUserId === intern.user_id ? (
+                          {removingUserId === intern.id ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
                           ) : (
                             <Trash2 className="w-4 h-4" />

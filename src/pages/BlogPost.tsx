@@ -20,6 +20,10 @@ const BlogPost = () => {
           setPost(fetchedPost);
           setContent(fetchedPost.content || '');
         })
+        .catch(() => {
+          setPost(null);
+          setContent('');
+        })
         .finally(() => setIsLoading(false));
     }
   }, [slug]);

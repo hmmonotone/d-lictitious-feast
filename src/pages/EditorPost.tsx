@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '@/components/layout';
-import { useAuth } from '@/hooks/useAuth';
 import { apiFetch } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,7 +23,6 @@ const postSchema = z.object({
 const EditorPost = () => {
   const { slug: editSlug } = useParams();
   const isEditing = Boolean(editSlug);
-  const { user, isEditor, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -40,19 +38,10 @@ const EditorPost = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/blog/editor');
-    } else if (!authLoading && user && !isEditor) {
-      toast.error('You do not have editor permissions');
-      navigate('/');
-    }
-  }, [user, isEditor, authLoading, navigate]);
-
-  useEffect(() => {
-    if (isEditing && user && isEditor) {
+    if (isEditing) {
       fetchPost();
     }
-  }, [isEditing, user, isEditor]);
+  }, [isEditing]);
 
   async function fetchPost() {
     setIsLoading(true);
@@ -130,7 +119,7 @@ const EditorPost = () => {
     setIsSaving(false);
   }
 
-  if (authLoading || !isEditor || (isEditing && isLoading)) {
+  if (isEditing && isLoading) {
     return (
       <Layout>
         <div className="pt-32 pb-16 flex justify-center">

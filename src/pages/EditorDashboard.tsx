@@ -9,25 +9,16 @@ import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Loader2 } from 'lucide-react';
 import { BlogPost } from '@/types';
 
 const EditorDashboard = () => {
-  const { user, isEditor, isLoading: authLoading, signOut } = useAuth();
+  const { loading, logout } = useAuth();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/blog/editor');
-    } else if (!authLoading && user && !isEditor) {
-      toast.error('You do not have editor permissions');
-      navigate('/');
-    }
-  }, [user, isEditor, authLoading, navigate]);
-
-  useEffect(() => {
-    if (user && isEditor) {
+    if (!loading) {
       fetchPosts();
     }
-  }, [user, isEditor]);
+  }, [loading]);
 
   async function fetchPosts() {
     setIsLoading(true);
@@ -66,11 +57,11 @@ const EditorDashboard = () => {
   }
 
   async function handleSignOut() {
-    await signOut();
+    await logout();
     navigate('/');
   }
 
-  if (authLoading || !isEditor) {
+  if (loading) {
     return (
       <Layout>
         <div className="pt-32 pb-16 flex justify-center">

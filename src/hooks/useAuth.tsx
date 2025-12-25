@@ -9,25 +9,21 @@ type AuthUser = {
 
 interface AuthContextType {
   user: AuthUser | null;
-  isEditor: boolean;
-  isAdmin: boolean;
-  isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signOut: () => Promise<void>;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<{ error: Error | null }>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [isEditor, setIsEditor] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = getAuthToken();
     if (!token) {
-      setIsLoading(false);
+      setLoading(false);
       return;
     }
 
@@ -35,18 +31,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then((data) => {
         const authUser = data.user as AuthUser;
         setUser(authUser);
-        setIsAdmin(authUser.role === 'admin');
-        setIsEditor(authUser.role === 'admin' || authUser.role === 'editor');
       })
       .catch(() => {
         clearAuthToken();
       })
       .finally(() => {
-        setIsLoading(false);
+        setLoading(false);
       });
   }, []);
 
-  async function signIn(email: string, password: string) {
+  async function login(email: string, password: string) {
     try {
       const data = await apiFetch('/login', {
         method: 'POST',
@@ -56,23 +50,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setAuthToken(data.token as string);
       const authUser = data.user as AuthUser;
       setUser(authUser);
-      setIsAdmin(authUser.role === 'admin');
-      setIsEditor(authUser.role === 'admin' || authUser.role === 'editor');
       return { error: null };
     } catch (error) {
       return { error: error as Error };
     }
   }
 
-  async function signOut() {
+  async function logout() {
     clearAuthToken();
     setUser(null);
-    setIsEditor(false);
-    setIsAdmin(false);
   }
 
   return (
-    <AuthContext.Provider value={{ user, isEditor, isAdmin, isLoading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

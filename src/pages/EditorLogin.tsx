@@ -18,7 +18,7 @@ const EditorLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,7 +31,7 @@ const EditorLogin = () => {
     }
 
     setIsLoading(true);
-    const { error } = await signIn(email, password);
+    const { error } = await login(email, password);
     setIsLoading(false);
 
     if (error) {
