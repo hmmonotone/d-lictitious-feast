@@ -1,10 +1,13 @@
-name = "dlitticious"
+name = "d-lictitious-feast"
 compatibility_date = "2024-11-12"
+
+[assets]
+directory = "./dist"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "dlitticious"
-database_id = "REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID"
+database_id = "ce31d443-87e4-4c6a-9e64-df7b6030eb5b"
 
 [vars]
-AUTH_SECRET = "REPLACE_WITH_A_LONG_RANDOM_SECRET"
+AUTH_SECRET = "dlitticiousservesthebestlittichokhaaaintheworld"
