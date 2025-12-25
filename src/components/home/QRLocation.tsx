@@ -24,7 +24,7 @@ export function QRLocation() {
               <div className="bg-white p-4 rounded-2xl shadow-sm mb-6">
                 <img alt="Scan to open restaurant location in Google Maps" className="w-48 h-48 object-contain" loading="lazy" onError={e => {
                 (e.target as HTMLImageElement).src = '/placeholder.svg';
-              }} src="/lovable-uploads/e7a6c15e-6399-4e74-9426-bb16b58020ab.png" />
+              }} src="/qr-location.png" />
               </div>
 
               <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
