@@ -9,12 +9,35 @@ import { useToast } from '@/hooks/use-toast';
 
 const Contact = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({ name: '', contact: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', contact: '', message: '', company: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({ title: 'Message sent!', description: "We'll get back to you soon." });
-    setFormData({ name: '', contact: '', message: '' });
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.error || 'Unable to send your message.');
+      }
+
+      toast({ title: 'Message sent!', description: "We'll get back to you soon." });
+      setFormData({ name: '', contact: '', message: '', company: '' });
+    } catch (error) {
+      toast({
+        title: 'Message failed',
+        description: error instanceof Error ? error.message : 'Please try again shortly.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -34,6 +57,15 @@ const Contact = () => {
             <div>
               <h2 className="font-display text-2xl font-bold mb-6">Send us a message</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="hidden">
+                  <label className="block text-sm font-medium mb-2">Company</label>
+                  <Input
+                    value={formData.company}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    autoComplete="off"
+                    tabIndex={-1}
+                  />
+                </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Name</label>
                   <Input value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
@@ -46,7 +78,9 @@ const Contact = () => {
                   <label className="block text-sm font-medium mb-2">Message</label>
                   <Textarea value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} rows={4} required />
                 </div>
-                <Button type="submit" className="w-full bg-primary">Send Message</Button>
+                <Button type="submit" className="w-full bg-primary" disabled={isSubmitting}>
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                </Button>
               </form>
             </div>
 

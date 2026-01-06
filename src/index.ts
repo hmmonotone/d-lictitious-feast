@@ -20,10 +20,15 @@ type Env = {
   ASSETS?: { fetch: (request: Request) => Promise<Response> };
   DB?: D1Database;
   AUTH_SECRET?: string;
+  CONTACT_RECIPIENT?: string;
+  CONTACT_SENDER?: string;
+  CONTACT_SENDER_NAME?: string;
 };
 
 const TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7;
 const PASSWORD_ITERATIONS = 310000;
+const CONTACT_RATE_LIMIT_MAX = 5;
+const CONTACT_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -75,6 +80,10 @@ async function handleApi(request: Request, env: Env, url: URL) {
       return handleLogin(request, env);
     }
 
+    if (path === 'contact' && method === 'POST') {
+      return handleContact(request, env);
+    }
+
     if (path === 'me' && method === 'GET') {
       const user = await requireAuth(request, env);
       if (!user) return json({ error: 'Unauthorized' }, 401);
@@ -89,6 +98,110 @@ async function handleApi(request: Request, env: Env, url: URL) {
   } catch (error) {
     return json({ error: (error as Error).message || 'Server error' }, 500);
   }
+}
+
+async function handleContact(request: Request, env: Env) {
+  const body = await readJson(request);
+  const name = String(body.name || '').trim();
+  const contact = String(body.contact || '').trim();
+  const message = String(body.message || '').trim();
+  const company = String(body.company || '').trim();
+
+  if (company) {
+    return json({ ok: true });
+  }
+
+  if (!name || !contact || !message) {
+    return json({ error: 'Missing required fields' }, 400);
+  }
+
+  if (env.DB) {
+    const clientIp = getClientIp(request);
+    if (clientIp) {
+      const limited = await enforceContactRateLimit(env.DB, clientIp);
+      if (limited) {
+        return json({ error: 'Too many messages. Please try again later.' }, 429);
+      }
+    }
+  }
+
+  const recipient = env.CONTACT_RECIPIENT || 'regionalessenseventures@gmail.com';
+  const sender = env.CONTACT_SENDER || 'no-reply@dlitticious.com';
+  const senderName = env.CONTACT_SENDER_NAME || 'D-Litticious Website';
+  const replyTo = contact.includes('@') ? { email: contact, name } : undefined;
+
+  const payload = {
+    personalizations: [{ to: [{ email: recipient }] }],
+    from: { email: sender, name: senderName },
+    subject: `New contact form message from ${name}`,
+    content: [
+      {
+        type: 'text/plain',
+        value: [
+          `Name: ${name}`,
+          `Contact: ${contact}`,
+          '',
+          'Message:',
+          message
+        ].join('\n')
+      }
+    ],
+    ...(replyTo ? { reply_to: replyTo } : {})
+  };
+
+  const response = await fetch('https://api.mailchannels.net/tx/v1/send', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    return json({ error: `Email delivery failed: ${errorText || response.status}` }, 502);
+  }
+
+  return json({ ok: true });
+}
+
+function getClientIp(request: Request) {
+  const header = request.headers.get('CF-Connecting-IP')
+    || request.headers.get('X-Forwarded-For')
+    || request.headers.get('x-forwarded-for');
+  if (!header) return '';
+  return header.split(',')[0]?.trim() || '';
+}
+
+async function enforceContactRateLimit(db: D1Database, ip: string) {
+  const now = Date.now();
+  const existing = await db.prepare(
+    'SELECT ip, window_start, count FROM contact_rate_limits WHERE ip = ?'
+  )
+    .bind(ip)
+    .first<{ ip: string; window_start: number; count: number }>();
+
+  if (!existing) {
+    await db.prepare(
+      'INSERT INTO contact_rate_limits (ip, window_start, count) VALUES (?, ?, ?)'
+    )
+      .bind(ip, now, 1)
+      .run();
+    return false;
+  }
+
+  if (now - existing.window_start < CONTACT_RATE_LIMIT_WINDOW_MS) {
+    if (existing.count >= CONTACT_RATE_LIMIT_MAX) {
+      return true;
+    }
+    await db.prepare('UPDATE contact_rate_limits SET count = ? WHERE ip = ?')
+      .bind(existing.count + 1, ip)
+      .run();
+    return false;
+  }
+
+  await db.prepare('UPDATE contact_rate_limits SET window_start = ?, count = ? WHERE ip = ?')
+    .bind(now, 1, ip)
+    .run();
+  return false;
 }
 
 async function handlePostsList(request: Request, env: Env) {

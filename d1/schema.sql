@@ -20,6 +20,12 @@ CREATE TABLE IF NOT EXISTS blog_posts (
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
+CREATE TABLE IF NOT EXISTS contact_rate_limits (
+  ip TEXT PRIMARY KEY,
+  window_start INTEGER NOT NULL,
+  count INTEGER NOT NULL
+);
+
 INSERT OR IGNORE INTO users (id, email, password_hash, password_salt, role)
 VALUES (
   '6c7d9b52-0a1b-4a9c-9a9b-8a9a3f8bba2c',

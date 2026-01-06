@@ -20,3 +20,6 @@ persist = true
 
 [vars]
 AUTH_SECRET = "dlitticiousservesthebestlittichokhaaaintheworld"
+CONTACT_RECIPIENT = "regionalessenseventures@gmail.com"
+CONTACT_SENDER = "contact@dlitticious.com"
+CONTACT_SENDER_NAME = "D-Litticious Website"
