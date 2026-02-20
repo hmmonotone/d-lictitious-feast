@@ -37,7 +37,7 @@ export function Hero() {
 
           {/* Heading */}
           <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-foreground mb-6 animate-slide-up">
-            d'<span className="text-primary">LITTI</span>cious
+          d'<span className="text-primary">LITTI</span>ciousBihari Restaurant in Bangalore – Authentic Litti Chokha
           </h1>
 
           {/* Tagline */}
